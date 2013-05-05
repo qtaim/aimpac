@@ -1,0 +1,108 @@
+AIMPAC UTILITIES                                              bubble(1)
+
+NAME
+       Bubble - Finds critical points in del-squared rho.
+
+SYNOPSIS
+       Bubble dbtfile wfnfile
+
+DESCRIPTION
+       
+       The program searches the surface of a sphere around the nucleus until
+       a point is found with the desired curvatures. The location of the
+       critical point within this region is then found using a Quasi-Newton
+       method. The program then computes the values of del-squared rho and 
+       Grad rho at the critical points.
+
+ARGUMENTS
+
+    dbtfile ( for example "hco2.dbt" )
+       The dbtfile file contains the necessary information to perform the 
+       search.
+
+    wfnfile ( for example "hco2.wfn" )
+       The wavefunction file contains the basis set and optimized 
+       coefficients from a SCF calculation describing the charge 
+       distribution of that molecule.
+
+FORMAT
+
+        The input to BUBBLE is free format with the first seven characters 
+        of each card being ignored by the routine and used by the user 
+        as labels for ease of use.  An example of the input is given here.
+
+
+          TITLE: O2 OF HCO2-,(3,-3)CRITICAL POINTS
+          ATOM#:  2
+          POINTS: 3
+          SIGNAT: -3
+          RANGE:  0.55 0.75
+
+       The cards are used as follows;
+
+   TITLE: O2 OF HCO2-,(3,-3)CRITICAL POINTS
+          A 60 character title string.
+
+   ATOM #: 2
+          The atom number of the atom to be searched. 
+                          
+   POINTS: 3
+          The number of critical points to be found.
+          There are two choices which may be entered in this
+          card.
+
+             1. Enter the number of critical points expected.
+             2. Enter 0 for a search for an unknown number of 
+                critical points.
+
+          The quickest route is to enter the number of critical points that
+          are expected in the neighbourhood of the searched atom. 
+          The maximum number which can be entered in this card is 19.
+ 
+          If the user has no idea of how many critical points are present
+          and cannot make an educated guess then entering a 0 in the
+          card will have the program search for a length of time and
+          then print out all the points it has found. 
+
+   SIGNAT: -3
+          Enter the signature of the desired critical points which may equal
+	  -3, -1, 1, or 3. Only critical points with the indicated signature
+	  will be searched for. In the present version of this program only
+	  one signature can be entered at a time.
+
+   RANGE: 0.55 0.75
+          This card gives the minimum and maximum distances from the nucleus
+          to be searched. Both of these values must be positive and the
+          order of the two values in this card is important (the first
+          number must always be less than the second). The critical
+          points must lie between these two values so it is important to
+	  have an approximate idea of how far the critical points are from
+	  the nucleus. The length of time required to find the critical
+          points is proportional to the size of the searching interval. The
+	  raduis of the sphere on which the critical points for a given
+	  quantum shell are found is characteristic for each atom and are
+	  given in R. F. W. Bader: 'Atoms in Molecules-- A Quantum Theory',
+	  p.259, Clarendon Press, Oxford (1990).
+
+
+       Therefore the example shown above specifies a search around the
+       oxygen atom in the formate anion for three (3,-3) critical points.
+       The search will be restricted to the volume enclosed by the
+       radii of 0.55 au and 0.75 au from the oxygen nucleus. As soon
+       as three distinct (3,-3) critical points are found the program
+       will stop.
+
+OUTPUT
+      Bubble generates a file giving the locations and properties of the
+      critical points found. This file will have the file extension
+      '.bub'.
+
+EXAMPLE
+       bubble hco2 hco2
+           This requests a search for critical points described
+           in hco2.dbt using the wavefunction hco2.wfn.
+
+
+
+
+Release 0.9                    AIMPAC                         bubble(1)

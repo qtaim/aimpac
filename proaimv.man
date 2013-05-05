@@ -1,0 +1,299 @@
+C    PROAIMV MANUAL
+C    Version 94 Revision B
+C
+C    THIS PROGRAM DETERMINES PROPERTIES OF ATOMS IN MOLECULES FROM
+C    AB-INITIO MOLECULAR WAVEFUNCTIONS.  THIS IS DONE BY INTEGRATING
+C    CORRESPONDING PROPERTY DENSITIES OVER THE ATOMIC BASINS,
+C    THE BOUNDARIES OF WHICH ARE SURFACES HAVING LOCAL ZERO-FLUX OF THE 
+C    GRADIENT OF THE ELECTRON DENSITY (GRADRHO).  THE ATOMIC SURFACES
+C    ARE FOUND EITHER BY WALKING ALONG TRAJECTORIES OF GRADRHO FROM 
+C    THE (3,-1) BOND CRITICAL POINTS OF RHO WHICH ARE IN THE ATOMIC 
+C    SURFACE ("PROAIM") OR BY FINDING THE POINTS ALONG EACH INTEGRATION
+C    RAY WHERE THE ATTRACTOR OF THE GRADRHO TRAJECTORIES INTERSECTING
+C    THE RAY CHANGES FROM THE NUCLEUS OF THE INTEGRATED ATOM TO ANOTHER
+C    NUCLEUS, OR VICE VERSA.  THE LATTER SURFACE ALGORITHM IS CALLED 
+C    "PROMEGA."
+C
+C    For Information on the Original PROAIM program and a description
+C    of the output please see:
+C    "CALCULATION OF THE AVERAGE PROPERTIES OF ATOMS IN 
+C    MOLECULES. II"; F.W. Biegler Konig, R.F.W. Bader, T. Tang; Journal
+C    of Computational Chemistry;  Volume 13 (No. 2); 1982
+C
+C     QUESTIONS AND SUGGESTIONS SHOULD BE DIRECTED TO:
+C     Richard Bader   McMASTER UNIVERSITY, DEPT. OF CHEMISTRY,
+C     HAMILTON, ONTARIO CANADA
+C     BITNET ADDRESS:  BADER@MCMAIL.CIS.MCMASTER.CA
+C     or 
+C     Todd A. Keith
+C     keith@babbage.chemistry.mcmaster.ca
+C
+C     JANUARY-MARCH 1981:
+C     PROAIM WRITTEN BY F.W. BIEGLER-KOENIG AND J.A. DUKE MCMASTER UNIV.
+C     NOVEMBER 1988-FEBRUARY 1989:
+C     PROAIM MODIFIED AND STREAMLINED KEITH E LAIDIG MCMASTER UNIV.
+C
+C     INTEGRATION STRUCTURE HEAVILY MODIFIED,VECTORIZED --> "PROAIMV"
+C     TODD A. KEITH:  McMASTER UNIVERSITY, HAMILTON ONTARIO 1991
+C
+C     PRIMITIVE CUTOFF ALGORITHM INCORPORATED 
+C     TAK  JUNE 1, 1992
+C
+C     SEPARATION OF BETA SPHERE INTEGRATION FROM OUTER INTEGRATION
+C     INCORPORATED.  TAK JUNE 10 1992
+C
+C     ADDITION OF F FUNCTIONS RICHARD BONE 1993
+C
+C     MAJOR CLEANUP AND ALLOWANCE OF ARBITRARY EVEN-ORDER QUADRATURE
+C     FOR THETA, PHI AND RADIAL INTEGRATIONS.  ADDITION OF PROMEGA 
+C     SURFACE ALGORITHM AND CHANGE OF INPUT/OUTPUT FORMAT.  (PROMEGA 
+C     SURFACE ALGORITHM DEVELOPED BY TAK and James R. Cheeseman.)
+C     TAK 12/93
+C
+C     INCORPORATION OF MAGNETIC PROPERTIES CAPABILITY 
+C     TAK 3/94
+C
+C     Generalization of Atomic Overlap Matrix (AOM) and AOM derived
+C     properties to ROHF, UHF and natural orbital wavefunctions.  
+C     JRC and TAK 3/94
+C
+C     Fixed bug for F-functions in "gauscheck".  TAK 3/94
+C
+C     PROAIMV CAN HANDLE S,P,D(6) and F(10) TYPE GAUSSIAN FUNCTIONS
+C              
+C     The maximum number of Theta, Phi and Radial points are determined
+C     by the parameters MaxTht, MaxPhi and MaxRad.  Presently, they are
+C     set at 200, which is larger than anyone will probably ever want ...
+C
+C     The maximum number of nuclei, molecular orbitals and primitives
+C     are determined by the parameters Mcent, MMO and MPRIMS.  Presently
+C     they are set at 50, 100 and 500 respectively.
+C
+C**********************************************************************
+C     TO LOWER MEMORY REQUIREMENTS, LOWER THE PARAMETER MPTS IN GAUS3,
+C     FUNC3, INTARC and TRUDGE3 - BUT THE LOWER MPTS, THE SLOWER THE JOB.
+C     DO NOT CHANGE THE PARAMETERS MPTS0 AND MPTSX IN GAUSCHECK UNLESS
+C     THE CUTOFF ALGORITHM IS MODIFIED.
+C**********************************************************************
+C
+C     To Run PROAIMV, two files are needed:  the AIMPAC wavefunction
+C     file (with the extension ".wfn") and the integration input file
+C     (with the extension ".inp").  PROAIMV produces an output file
+C     with the extension ".int".  For example, to run PROAIMV on a 
+C     carbon atom of c4h4 (with the executable "proaimv"):
+C
+C     proaimv c4h4_c1 c4h4
+C
+C     where c4h4_c1 refers to the file "c4h4_c1.inp" and c4h4 refers
+C     to the wavefunction file "c4h4.wfn".
+C
+C     The input for PROAIMV is dependent upon which Surface Algorithm
+C     is to be used.  The first surface algorithm (PROAIM) is usually
+C     faster but requires more user input and may sometimes seriously
+C     fail.  The second surface algorithm (PROMEGA) is slower but
+C     rarely fails. 
+C
+C     As an Example, an Input File for a PROAIM Job is given below 
+C     within the Starred (*) box for a carbon atom of 
+C     tetrahedrane (C4H4):
+C
+C        *************************************************
+CARD1    *C4H4_C1 RHF/6-31G**                            *
+CARD2    *  C    1                                       *
+CARD3    *PROAIM                                         *
+CARD4    *  4 3 1                                        *
+CARD5    *9.71207959E-10  1.98184301E-09  1.15576886E+00 *  (C1-C2 bcp)
+CARD6    *1.15576886E+00 -4.37939987E-09 -2.58361695E-09 *  (C1-C3 bcp)
+CARD7    *-8.22575222E-10  1.15576886E+00  5.95489085E-09*  (C1-C4 bcp)
+CARD8    *1.72948569E+00  1.72948569E+00  1.72948568E+00 *  (C1-H5 bcp)
+CARD9    *3.99523990E-01 -3.99523987E-01  3.99523978E-01 *  (C1-C2-C3 rcp)
+CARD10   *-3.99523982E-01  3.99523994E-01  3.99523989E-01*  (C1-C2-C4 rcp)
+CARD11   *3.99523989E-01  3.99523987E-01 -3.99523978E-01 *  (C1-C3-C4 rcp)
+CARD12   *1.14033776E-08  2.52500697E-09 -3.50325120E-10 *  (C1-C2-C3-C4 ccp)
+CARD13   *1 2 8 0                                        *
+CARD14   *1 3 8 0                                        *
+CARD15   *2 3 8 0                                        *
+CARD16   *64 48 96                                       *
+CARD17   *OPTIONS                                        *
+CARD18   *INTEGER 1                                      *
+CARD19   *6 1                                            *
+CARD20   *REAL 2                                         *
+CARD21   *1 9.0                                          *
+CARD22   *4 1.0D-8                                       *
+C        ************************************************* 
+C
+Card1 is the job title (up to 80 characters)
+Card2 is the Atom Name in A4I4 Format
+Card3 specifies that the PROAIM surface algorithm is to be used
+Card4 specifies the number of bond critical points (bcp), ring critical
+C     points (rcp) and cage critical points lying within the surface
+C     of the carbon atom
+Cards5-8 specify the coordinates of the bond critical points (in au).
+cards9-11 specify the coordinates of the ring critical points (in au).
+card12 specifies the coordinates of the cage critical point (in au).
+Cards13-15 specify how the ring critical points are linked to the bond
+C          critical points and the cage critical points.  Thus, Card13
+C          says that the first rcp is connected to the first two bcp's
+C          and to the cage critical point.  THE INFORMATION ABOUT THE
+C          CRITICAL POINTS MUST BE DETERMINED BY THE PROGRAM "EXTREME".
+Card16 Specifies three numerical integration parameters:  the number
+C      of Phi planes, the number of theta planes and the number of 
+C      radial points to be used per integration ray within the Beta Sphere.
+Card17 Specifies whether the user wishes to change the default 
+C      parameters of the program.  If only defualt values are to be
+C      used then the OPTIONS card should be absent.
+Card18 Specifies that one integer parameter is to be specified in the 
+C      following cards.
+Card19 specifies that integer parameter 6 is to be set to the value 1
+Card20 Specifies that two real parameters are to be specified in the
+C      following cards.
+Card21 Specifies that the real parameter 1 is set to the value 9.0
+Card22 Specifies that the real parameter 4 is set to the value 1.0D-8
+C
+C     A description of the parameters and their default values is as
+C     follows if PROAIM is specified:
+C
+C INTEGER OPTIONS:
+C    (1) = whether pre-job primitive cutoffs are to be used: 0/1 = No/Yes
+C          Default is 1.
+C    (2) = Number of points per gradrho path in the surface tracing
+C          Default is 140
+C    (3) = Number of basic gradrho paths used in the surface tracing
+C          Default is 80
+C    (4) = Multiple of the default number of radial points to be
+C          used for integration outside the BEta sphere and the default
+C          number of theta and phi planes to be used inside the Beta
+C          Sphere.  Default is 1.
+C    (5) = Maximum number of gradrho paths which can be inserted between
+C          adjacent basic paths.  Default is 6
+C
+C    (6) = Whether to calculate the atomic overlap matrix: 0/1 = No/Yes
+C          Default is 0.  For correlated wavefunctions, where there
+C          are a relatively large number of Molecular orbitals, the
+C          computation of the AOM can become dominant in terms of CPU
+C          time.
+C    (7) = Whether to calculate second-order magnetic properties - namely
+C          the atomic contribution to the shielding tensors of the nuclei
+C          and the atomic magnetic susceptibility tensor and
+C          the atomic "net current tensor".  Note that for magnetic 
+C          properties, the first-order wavefunctions for the Lx, Ly, Lz
+C          Px, Py and Pz perturbations are required in addition to the
+C          unperturbed wavefunction.  Default is no (0).
+C
+C    (8) = Type of Gauge Transformations to perform to calculate the
+C          Current Distribution Within the atom, and hence the atom's
+C          other magnetic properties.  0 = Use IGAIM method - gauge origin 
+C          coincident with the nucleus of the integrated atom.  
+C          1 = use another single gauge origin - the gauge origin should be
+C          specified (X,Y,Z) on the following card.  2=Becke-Igaim.
+C          Default is 0 (IGAIM).
+C          
+C    (9) = If this is an unrestricted wfn, the number of the first beta MO.
+C          Default = 0.
+C
+C REAL OPTIONS:
+C    (1) = Maximum distance from the nucleus of the integrated atom
+C          to integrate to.  Default is 9.0 au
+C    (2) = Value of the first rho isosurface.  Default is 0.001 au.
+C    (3) = Value of the second rho isosurface.  Default is 0.002 au.
+C    (4) = Cutoff Value for the primitive cutoff algorithms.  Smaller
+C          is more accurate but more time-consuming.  Default is 1.0D-9.
+C    (5) = Maximum Allowable Distance between ends of adjacent 
+C          gradrho paths.  Default is 0.6 au.
+C    (6) = Length of Grad Rho Paths in Surface Tracing.  
+C          Default is 8.0 au.
+C
+C     The input file for a PROMEGA job is simpler.  An example is given
+C     below in the starred (*) box for the same carbon atom:
+C
+C        **********************************************
+CARD1    *C4H4_C1 RHF/6-31G**                         *
+CARD2    *  C    1                                    *
+CARD3    *PROMEGA                                     *
+CARD4    *64 48 96                                    *
+CARD5    *OPTIONS                                     *
+CARD6    *INTEGER 1                                   *
+CARD7    *3 4                                         *
+CARD8    *REAL 2                                      *
+CARD9    *6 0.0015                                    *
+CARD10   *7 0.03                                      *
+C        **********************************************
+C
+Card1 specifies the job title A80
+Card2 specifies the atom name A4I4
+Card3 specifies that the PROMEGA surface algorithm is to be used
+Card4 is the number of phi, theta and radial points as in Card 16 above.
+Card5 specifies whether optional parameters are to be supplied in the
+C     following cards.  If all default values are to be used, this
+C     OPTIONS card should not be specified
+Card6 Specifies that one integer parameter is to be specified in the 
+C     following cards.
+Card7 specifies that integer parameter 3 is to be set to the value 4.
+Card8 Specifies that two real parameters are to be specified in the
+C      following cards.
+Card9 Specifies that the real parameter 6 is set to the value 0.0015
+Card10 Specifies that the real parameter 7 is set to the value 0.03
+C     
+C     A description of the parameters and their default values is as
+C     follows if PROMEGA is specified:
+C
+C INTEGER OPTIONS:
+C     (1) = whether second and third intersections of the integration
+C           rays with the atomic surface are searched for 1/0 = No/Yes.
+C           Default is 1 (search only for first intersections).
+C     (2) = Number of small steps per regular step in tracing the
+C           gradrho trajectories.  Default is 5
+C     (3) = Order of Adam's Bashforth-Moulton predictor corrector method
+C           to be used in calculating the gradrho trajectries.
+C           Defualt is 6.
+C     (4) = Multiple of the default number of radial points to be
+C           used for integration outside the BEta sphere and the default
+C           number of Theta and Phi planes to be used inside the Beta 
+C           Sphere.  Default is 1.
+C
+C    (6) = Whether to calculate the atomic overlap matrix: 0/1 = No/Yes
+C          Default is 0.  For correlated wavefunctions, where there
+C          are a relatively large number of Molecular orbitals, the
+C          computation of the AOM can become dominant in terms of CPU
+C          time so this option should be considered for such cases.
+C
+C    (7) = Whether to calculate second-order magnetic properties - namely
+C          the atomic contribution to the shielding tensors of the nuclei
+C          and the atomic magnetic susceptibility tensor and
+C          the atomic "net current tensor".  Note that for magnetic 
+C          properties, the first-order wavefunctions for the Lx, Ly, Lz
+C          Px, Py and Pz perturbations are required in addition to the
+C          unperturbed wavefunction.
+C
+C    (8) = Type of Gauge origin to use in order to calculate the
+C          Current Distribution Within the atom, and hence the atom's
+C          other magnetic properties.  0 = Use IGAIM method - gauge origin 
+C          coincident with the nucleus of the integrated atom.  
+C          1 = use another single gauge origin - the gauge origin should be
+C          specified (X,Y,Z) on the following card.  2=Becke-Igaim.
+C          Default is 0 (IGAIM).
+C          
+C    (9) = If this is an unrestricted wfn, the number of the first beta MO.
+C          Default = 0.
+C
+C REAL OPTIONS:
+C     (1) = Maximum Distance from nucleus of integrated atom to 
+C           integrate to.  Default is 9.0 au
+C     (2) = Value of the first rho isosurface.  Default is 0.001 au.
+C     (3) = Value of the second rho isosurface.  Default is 0.002 au.
+C     (4) = Value for the primitive cutoff algorithms.  Smaller is more
+C          accurate but more time-consuming.  Default is 1.0D-9.
+C     (5) = How far out along the integration rays to search for
+C           an intersection.  Default is 7.5.
+C     (6) = How close to the atomic surface to get in intersections
+C           search.  Default is 0.001.  Smaller is better but more time
+C           consuming.
+C     (7) = Step Size for tracing the gradrho trajectories.
+C           Default is 0.025 au
+C     (8) = Initial Step Size along integration rays in search for 
+C           First intersections.  Default is 0.25 au
+C     (9) = Initial Step Size along integration rays in search for
+C           Second and Third intersections.  Default is 0.025 au
+C
+C     Atomic Units only are used throughout ...
+C

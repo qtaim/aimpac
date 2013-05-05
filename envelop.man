@@ -1,0 +1,65 @@
+
+AIMPAC Utilities                                                    envelope(3)
+ 
+NAME
+     envelope - produces 3-D envelopes of CUBE output
+ 
+SYNOPSIS
+     envelope qubfile envfile
+ 
+DESCRIPTION
+ 
+        The ENVELOPE program reads in a cube of data (qubfile) 
+        output by CUBE and produces an iso-valued envelope of the 
+        function, output to envfile.  This is done using interactive 
+        queries of the user for plotting information.  The resulting 
+        file is these redirected to the output device for plotting.
+ 
+ARGUMENTS
+ 
+     qubfile (for example 'hcoh.qub')
+        The qubfile contains a cube of data output by the program
+        CUBE.
+ 
+     envfile (for example 'hcoh.rel')
+        The output envfile contains the plotter calls to produce
+        the envelope.  This output file is redirected to the 
+        plotter directly. (for example 'cat hcoh.env > /dev/tty02')
+ 
+INTERACTIVE DIALOG
+ 
+        Once the program has read in the cube of data the following
+        questions are asked of the user;
+ 
+        1) EYE POSITION
+ 
+        This requests the position of the eye of the viewer.  This point
+        can be considered as placed on an extended cube.  A good starting
+        point is 5*NX, 3.5*NY, 2*NZ.  For example, for a 100X100X100 cube,
+ 
+        EYE POSITION  500,350,200
+ 
+        would make a good initial guess.
+ 
+        2) OUTER CONTOUR VALUE
+ 
+        This is the value of the iso-surface.
+ 
+        3) LARGER VALUES INSIDE OR OUTSIDE ENVELOPE
+ 
+        The algorithm assumes that either the larger values are inside
+        the iso-surface (repsond with -1) or they are outside the
+        surface (respond with 1).  If you get a cube as the result try
+        using the other response.
+ 
+EXAMPLES
+ 
+     envelope hcoh hcoh
+        This requests a calculation of the isovalued envelope of the 
+        function in hcoh.qub.
+ 
+SEE ALSO
+     cube(3)
+ 
+Release 1.0                       AIMPAC                            envelope(3)
+

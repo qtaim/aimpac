@@ -1,0 +1,84 @@
+
+AIMPAC Utilities						    profil(3)
+
+NAME
+
+     PROFIL - produces profile information of rho or del sq rho along 
+	       a user defined line in a molecule. 
+
+
+SYNOPSIS
+
+     profil inpfile wfnfile 
+
+DESCRIPTION
+
+        The PROFIL program reads information from the inpfile
+	and wfnfile and outputs a file (.pro) containing the distances
+	from the starting point, the coordinates and the corresponding 
+        function value (rho or del sq rho).  
+
+ARGUMENTS
+
+     inpfile (for example 'hcoh.pfl')
+
+        The input file describes the type and characteristics of the 
+        desired profile.
+
+     wfnfile (for example 'hcoh.wfn')
+        The wavefunction file contains the primitive basis set and optimized 
+        primitive coefficients for the occupied orbitals of the molecular
+        wavefunction.
+
+OUTPUT
+
+        A file with the extention .pro is produced which contains the 
+        x,y,x coordinates, distance from starting point, and the function
+        (rho or del sq rho currently) value.  This data can be used for  
+        external plotting. 
+
+FORMAT
+
+	The input to PROFIL is free format with the first seven characters 
+	of each card being ignored by the routine and used by the user 
+	as labels for ease of use.  An example of the input is given here.
+
+
+	TITLE:  H2O 6-31g** profile plot of rho
+	PARAM:  100 1.0
+	START:  0.0 0.0  1.0
+	ENDPT:  0.0 0.0 2.0 
+	FUNC:   1
+
+        The cards are used as follows:
+
+        TITLE:  H2O 6-31g** profile plot of rho
+        The first card is a 80 character title card.
+
+        PARAM:  100 1.0
+	The first number (integer) of the second card is the desired 
+	number of equally spaced segments at which to evaluate the function 
+	along the line.  The second number (real) is the cutoff value for
+	the function.
+
+        START:
+	The third card contains the X,Y,Z coordinates of the desired 
+	starting point.  
+
+        ENDPT:
+	The fourth card contains the X,Y,Z coordinates of the desired 
+	end point. 
+
+        FUNC:
+	The fifth card selects the function which is to be profiled.  
+	1 selects rho, 2 selects del sq rho.
+
+EXAMPLES
+
+     profil hcoh hcoh 
+        This requests a calculation of the profile map given the information 
+	in hcoh.pfl.
+
+
+Release	2.0			  AIMPAC			    profil(3)
+

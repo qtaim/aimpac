@@ -1,0 +1,105 @@
+AIMPAC Utilities						    extreme(3)
+
+NAME
+
+     ext94b - interactively determines the locations of extrema (that is,
+           critical points) in the electron density, RHO (1), Laplacian
+	   of RHO, DEL**2(RHO) (2), Lagrangian Kinetic Energy Density, G (3),
+	   Hamiltonian Kinetic Energy Density, K (4), Nuclear Potential,
+	   Vnuc (5), and Potential Energy Density, V, the virial field (6).
+
+SYNOPSIS
+
+     ext94b wfnfile 
+
+DESCRIPTION
+
+        ext94b reads in the geometry and wavefunction from the
+	wfnfile and then interactively queries the user for
+	information.  The user may ask to find the locations of
+	critical points in rho, del-square-rho, G, K, Vnuc or 
+	V by starting from a given point or the midpoint between
+	atoms.  ext94b may also be used to determine the properties
+	of the electron density at a particular point, as well as
+	to determine the bond path length and bond path angles.
+
+ARGUMENTS
+
+     wfnfile (for example 'c4h4.wfn')
+        The wavefunction file contains the primitive basis set and optimized 
+        primitive coefficients for the occupied orbitals of the molecular
+        wavefunction.
+
+INTERACTIVE DIALOG
+
+	The user will be prompted with the title of the wavefunction
+	file and then asked to supply a title for that particular
+	run of ext94b.  The user will then see the prompt,
+
+	COORDS or NUCLEAR (0), BOND (1), RING(2), CAGE(3), ANGLE (4),
+	POINT (5), MEGA(6), OPTION(7), LIST CURRENT CP'S(8), STOP (9)
+
+	Choosing (1) locates a bond or (3, -1) critical point. The user
+	is prompted to choose a pair of atoms between which the critical
+	point is to be searched for and then is asked at which point the
+	search is to begin. This point is used as the starting point of
+	the quasi-Newton-Raphson search for the nearest extremum with the
+	designated curvatures.  If a critical point is found for RHO,
+	the user is asked if the trace of the bond path is desired.  This
+	MUST be done if the bond path angles are desired.
+
+	Choosing (2), the program searches for a ring critical point or
+	(3, +1) and the user is prompted to name three atoms in the
+	perimeter of the ring.
+
+	Choosing (3), the program searches for a cage or (3, +3) critical
+	point and the user is asked to name four atoms in the surfaces
+	bounding the cage. In some cases, the initial point in the search 
+	for a ring or cage critical point chosen by the program is too far
+	removed from the correct position and the user must then use his
+	intuition to make a better guess (0).
+                 
+	If (4) is chosen, the user is asked to name three atoms, 1, 2, and
+	3 that are linked by bond paths. The geometric and bond path angles
+	are then given.  The bond path must have already been traced for
+	each of the atomic pairs involved. The bond path angle for atoms 
+	1-2-3 is the limiting angle formed by the two bond paths that 
+	terminate at the central nucleus 2. It may be greater than (bond 
+	paths outwardly curved) or less than (bond paths inwardly curved)
+	the geometrical angle.
+
+	If (5) is chosen, the user is prompted for a set of Cartesian
+	coordinates. The properties of the scalar function at that point
+	are given.
+
+	If (6) is chosen, all critical points of a given type are searched
+	for. One may also request that the search be done for all types 
+	of critical points.
+
+	Choosing (7) enables one to change the parameters in the program, 
+	such as accuracy to used in evaluating the function, the print
+	options, or the gradient threshold for labelling a point a critical
+	point etc.
+
+	Choosing (8) causes the current critical points to be listed.
+
+OUTPUT
+
+	ext94b generates a file containing the information determined
+	in the run.  This file will have the file extension '.crt'.  
+
+        NOTE ALL VALUES ARE GIVEN IN ATOMIC UNITS!!!
+
+EXAMPLES
+
+     ext94b c4h4
+
+        This requests an interactive determination of the extrema in
+	rho, del-square-rho, G, K, Vnuc or V using the wavefuction in 
+	c4h4.wfn.
+
+SEE ALSO
+
+     proaimv(3), grdvec(3), bubble(1)
+
+Release	2.0			  AIMPAC			    extreme(3)

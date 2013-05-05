@@ -1,0 +1,131 @@
+                               A I M P A C  95
+AIMPAC.LIS                                                     AIMPAC PROGRAMS
+
+        
+                    DESCRIPTION OF THE AIMPAC PROGRAMS
+
+(Please see the .man files for a more detailed description of the programs)
+
+
+EXT94b.SRC   -The program EXT94b is used to locate and classify the 
+               critical points in electron density (rho), Laplacian of rho,
+	       Lagrangian Kinetic energy density, Hamiltonian Kinetic
+	       energy density, nuclear potential and the virial field.
+	       The program also computes various properties at these points.
+
+PROAIMV.SRC   - PROAIMV calculates average properties of an atom by 
+               numerical integration of the appropriate density over 
+               the basin of the atom. This is a vectorized version of
+	       old PROAIM program. In this new program the atomic surfaces
+	       can be determined by two different methods: which are labelled  
+	       PROAIM and PROMEGA. PROAIM will handle the majority of cases.
+	       In certain situations, difficulties are encountered in
+	       specifying the atomic surfaces and then PROMEGA must be used.
+               In  PROMEGA the atomic surfaces are located by determining
+	       where on a ray (from the nucleus of interest) the gradient
+	       paths passing through the ray change attractors.  This
+	       procedure bypasses many of the problems associated with the 
+	       surface routines used in PROAIM. No knowledge or use of
+	       critical points is required as the surface is found using
+	       essentially local conditions. PROMEGA has the ability 
+	       (depending on the input parameters) to give results of higher
+	       accuracy than PROAIM.  PROMEGA, however, is also much slower
+	       than PROAIM and should therefore, be used in situations where
+	       PROAIM fails to give results of sufficient accuracy or in
+	       complicated systems where all ring and or cage critical
+	       points are difficult to locate.
+
+	       Please see the installation section in proaimv.man
+
+
+BUBBLE.SRC   - BUBBLE finds critical points in the Laplacian of the electron
+	       density, del-square-rho.
+
+
+PROFIL.SRC   - A simple program which determines the value of either rho or
+               del-square-rho along a user defined line in a molecule.
+
+
+        THE FOLLOWING 7 PROGRAMS ARE GRAPHICS ROUTINES WHICH ARE DESCRIBED
+        IN  GRAPHICS.TXT
+
+
+GRDVEC.SRC   - GRDVEC calculates gradient paths in the electron density.
+
+SCHUSS.SRC   - SCHUSS calculates a set of trajectories of the gradient field of                the electron density starting in a user specified plane of
+               a molecule.  This is a vectorized version of GRDVEC. 
+
+GRIDV.SRC    - GRIDV calculates values of rho or del-squared rho etc.
+               for a grid of points in a user-specified plane.
+               This is a vectorized version of old GRID.
+
+CONTOR.SRC   - displays the grid of values from GRIDV in the form of a
+               contour map.
+ 
+RELIEF.SRC   - displays the grid of values from GRIDV in the form of
+               a relief map.
+
+CUBEV.SRC    - calculates values of rho or del-squared rho for a cube of 
+               points. This a vectorized version of old CUBE.
+
+ENVELOPE.SRC - displays output from CUBEV.
+
+
+
+
+           EXAMPLE INPUT AND OUTPUT FILES
+
+
+C4H4.WFN      -  Example wavefunction file for the tetrahedrane molecule.
+
+HCO2.WFN      -  Example wavefunction file for the formate anion.
+
+C4H4.COM      -  Example Gaussian 92 input file for tetrahedrane.
+
+HCO2.COM      -  Example Gaussian 92 input file for the formate anion.
+
+C4H4.CRT      -  Output from EXT94b for tetrahedrane.
+
+C4H4_C1.INP   -  Input file for PROAIMV (a carbon atom in tetrahedrane)
+                 (please see PROAIMV.MAN)
+   
+C4H4_C1.INT   -  Output file from PROAIMV (a carbon atom in tetrahedrane)
+
+ATOMIC.PROPS  -  Description of the output from PROAIMV
+
+HCO2.DBT      -  Input file for BUBBLE
+
+HCO2.BUB      -  Output file from BUBBLE
+
+C4H4.INF      -  Input file for GRIDV
+
+C4H4_QUB.INF  -  Input file for CUBEV
+
+C4H4.VEC      -  Input files to GRIDVEC or SCHUSS for tetrahedrane
+C4H4MG.VEC       (please see GRAPHICS.TXT) 
+
+AIMPAC.LIS    -  This file
+
+GRAPHICS.TXT  -  Discription of the graphic interface.
+
+HCO2.PFL
+
+HCO2.PRO
+
+            
+                 MANUAL PAGES
+
+EXT94b.MAN
+PROAIMV.MAN
+BUBBLE.MAN
+GRDVEC.MAN
+SCHUSS.MAN
+GRIDV.MAN
+CONTOR.MAN
+RELIEF.MAN
+CUBEV.MAN
+ENVELOPE.MAN
+PROFIL.MAN
+
+
+

@@ -1,0 +1,192 @@
+
+ 
+AIMPAC Utilities                                              grdvec(3)
+ 
+NAME
+     grdvec - calculates gradient paths of a charge distribution
+ 
+SYNOPSIS
+     
+     grdvec vecfile wfnfile
+ 
+DESCRIPTION
+ 
+        grdvec calculates gradient paths in the charge distribution
+        as requested by the user, outputting the calculated paths
+        into a file ready to be sent to the plotter.  The vecfile 
+        contains the number and type of gradient paths desired as 
+        outlined below.  The wfnfile contains the wavefunction for 
+        the molecule in terms of basis functions calculated by one 
+        of the ab initio molecular orbital packages.  The gradient
+        paths are calculated and written to an output file for 
+        redirection to the plotter.
+ 
+ARGUMENTS
+ 
+     vecfile (for example 'c4h4.vec')
+        The vecfile, described below, describes the orientation
+        of the chosen plane, the number, and the types of origins
+        desired within that plane.
+ 
+     wfnfile (for example 'c4h4.wfn')
+        The wavefunction file contains the basis set and optimized
+        coefficients from a SCF calculation describing the charge
+        distribution of that molecule.
+ 
+FORMAT
+ 
+        The input to GRDVEC is free format with the first seven characters 
+        of each card being ignored by the routine and used by the user 
+        as labels for ease of use.  An example of the input is given here.
+ 
+	TITLE:  Tetrahedrane, bisecting plane atoms and interatomic surfaces
+	PLOT:   10.0 0.100
+	CENTR:  0.0 0.0 0.0
+	PARAM:  0.1 0.005 0.005 1.0E-12 0 1
+	PLANE:  0 1 2 5 6
+	NORIG:  10
+	  9.71207959E-10  1.98184301E-09  1.15576886E+00   1  2  2
+	  1.72948569E+00  1.72948569E+00  1.72948568E+00   1  2  2
+	 -1.72948569E+00 -1.72948569E+00  1.72948568E+00   1  2  2
+	  3.99523990E-01  3.99523987E-01 -3.99523978E-01   1  2  2
+	 -3.99523982E-01 -3.99523994E-01 -3.99523989E-01   1  2  2
+	  0.97775600     0.97775600     0.97775600         0  0  36
+	 -0.97775600    -0.97775600     0.97775600         0  0  36
+	  2.13806500     2.13806500     2.13806500         0  0  36
+	 -2.13806500    -2.13806500     2.13806500         0  0  36
+	  1.35374830E-09 -4.33080537E-09 -1.15576886E+00   0  0  36
+
+ 
+        The cards are used as follows:
+ 
+     TITLE:  Tetrahedrane HF/6-31G*
+ 
+        The first card is a 60 character title card.
+ 
+     PLOT:   10.0 0.100
+ 
+        The second card defines the grid size and density.  The first real 
+        number (N1) is the length of either axis of the grid in atomic 
+        units (all values are in atomic units).  The second real number (N2) 
+        is the distance between each grid point along the axis.  This 
+        defines the density of the grid as there will be N1/N2 points 
+        along each axis and hence (N1/N2)**2 grid points in total.  GRDVEC
+        uses this information for scaling of the plots only, not in
+        the determination of the gradient paths.  It is a good and
+        suggested practice to use the same values for PLOT for
+        GRDVEC as used in GRID.
+ 
+     CENTR:  0.0 0.0 0.0
+ 
+        The third card defines the center of the plot in the molecular 
+        frame of reference.  The grid will be evenly placed about this 
+        point.
+ 
+     PARAM:  0.1 0.005 0.005 1.0E-12 0 1
+ 
+        The PARAM line contains five parameters used in the walking
+        algorithm.  The first number is the distance (in a.u., as are
+        the rest) from an attractor that the walk is started.  The 
+        second and third are the distances from the defined repellors
+        that the uphill and downhill walks are started, respectively.
+        The fourth number is the endpoint criterion for all walks.  The
+        next number determines whether the gradient vector paths are 
+        allowed out of the plane or not.  A zero (0) means that the paths
+        are to remain in the plane and a one (1) allows the gradient
+        vectors to leave the plane of the atoms.  The former is used
+        most often while the latter is used primarily for molecular
+        graphs. The last number is the slow/fast walking switch.  A zero
+        (0) means walk slowly (carefully) and a one (1) means step
+        quickly.  The fast switch should be set first and only turned
+        off if difficulty is encountered.
+ 
+     PLANE:  0 1 2 5 6
+ 
+        The fourth card allows the user to define the plane of interest 
+        for this calculation rotating it to the XY plane of the plotter.
+        The user has a choice of two methods for description of the plane, 
+        inertial axis or Euler angles.  The first integer read determines 
+        which method is used.  If the integer value is zero inertial axis 
+        is to be used.  The integers following are the atom numbers of 
+        those atoms within the plane.  Any number of atoms (up to 30) may 
+        be used to define the plane (three atoms define a plane, but more 
+        may be entered).  In this case, the user has requested that atoms 
+        1, 2, 5, and 6 be placed in the plane.  If the atoms do not define 
+        a plane, the routine will make a best fit to the plane and the 
+        results will most likely not be desirable.  
+ 
+        If the integer value is 1 then Euler angles will be used.  The 
+        first real number is the rotation, in degrees, about the molecular 
+        Z axis.  (Positive rotations correspond to clockwise rotations 
+        when viewing down that axis toward the origin from the positive 
+        axis)  The second real number is the rotation about the molecular 
+        X axis.  The third is the rotation about the Z axis of the 
+        plotter's frame.  For example if the tetrahedrane molecule were 
+        such that the four atoms of interest were in the YZ plane in the 
+        wavefunction file the following card would place those atoms in 
+        the plotter's XY plane.
+ 
+     PLANE:  1 90.0 90.0 0.0
+ 
+        This corresponds to rotation about the Z axis, placing the atoms
+        in the XZ plane.  The second rotation about the X axis places 
+        the atoms in the XY plane.  And the user has decided not to 
+        reorient the plane now that it is in the XY plane, hence the 
+        third angle is 0.0.
+ 
+     NORIG:  10
+ 
+        This card inputs the number of origins to be used.  GRDVEC is
+        dimensioned to handle up to 60 origins. Following this card are 
+        NORIG cards upon which are the origin coordinates and descriptors.
+ 
+	  9.71207959E-10  1.98184301E-09  1.15576886E+00   1  2  2
+	  1.72948569E+00  1.72948569E+00  1.72948568E+00   1  2  2
+	 -1.72948569E+00 -1.72948569E+00  1.72948568E+00   1  2  2
+	  3.99523990E-01  3.99523987E-01 -3.99523978E-01   1  2  2
+	 -3.99523982E-01 -3.99523994E-01 -3.99523989E-01   1  2  2
+	  0.97775600     0.97775600     0.97775600         0  0  36
+	 -0.97775600    -0.97775600     0.97775600         0  0  36
+	  2.13806500     2.13806500     2.13806500         0  0  36
+	 -2.13806500    -2.13806500     2.13806500         0  0  36
+	  1.35374830E-09 -4.33080537E-09 -1.15576886E+00   0  0  36
+ 
+        Each card lists the Cartesian coordinates of the origin followed
+        be three integers describing the type of origin and number of
+        ascending and descending gradient paths from that origin.  A (2,-2)
+        origin in the plane is an attractor in that plane and is
+        described by a descriptor '0'.  From each attractor there are
+        no ascending paths of grad rho, only descending. (e.g. from that
+        point paths of grad rho may only descend.  Thus for the first
+        two cards in the example, each is an attractor in the chosen
+        plane and the user has requested that 36 descending gradient
+        paths be mapped from each one.  The other critical point of
+        interest in a plane is the (2,0) (the (2,+2) paths are always
+        the end points of gradient paths and will always be found by
+        descending paths in grad rho from the other two types of critical
+        points.) and it is described by a descriptor of '1'.  The user
+        has requested that 2 ascending and 2 descending gradient paths be
+        calculated from these points.
+        
+OUTPUT
+ 
+        GRDVEC generates an output file with the file extension '.gvp'
+        which contains the calculated gradient paths.  This file
+        may be plotted by redirecting the output to the plotter.
+        On unix machines, the appropriate command would be:
+ 
+        $ cat c4h4.gvp > /dev/tty02 (printer device)
+ 
+EXAMPLES
+ 
+    grdvec c4h4 c4h4
+ 
+        This requests the calculation of the gradient vector
+        paths from the origins as described in the file c4h4.vec
+        using the wavefunction in c4h4.wfn.
+ 
+SEE ALSO
+     extreme(3), grid(3), contor(3), relief(3), cube(3), envelope(3)
+ 
+Release 1.0                       AIMPAC                      grdvec(3)
+

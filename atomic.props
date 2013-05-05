@@ -1,0 +1,143 @@
+PROAIM integration results for a carbon atom in tetrahedrane
+
+
+
+Atomic population
+              N   6.11111265564001E+00     NET CHARGE  -1.11112655640007E-01
+
+Atomic kinetic energy
+              G   3.78161312451535E+01
+
+Atomic kinetic energy.  E(ATOM) is the atomic energy where E = K(1+V/T)
+where V/T is the virial ratio from the scf calculation and is < 0
+              K   3.78159888118495E+01        E(ATOM)  -3.78364241940435E+01
+
+Atomic Lagrangian
+              L  -1.42433303975014E-04
+
+Atomic information
+              I   9.03088076458882E-01
+
+Atomic expectation value of r**n.   (Rn)
+
+          R(-1)   1.50066225818861E+01
+             R1   6.37464181978297E+00
+             R2   1.00371728972163E+01
+             R4   4.49932370690302E+01
+
+Atomic expectation values of r**n averaged over r*(gradrho). (GRn)
+         GR(-1)  -2.70925676815434E+01
+            GR0  -1.33440811557772E+01
+            GR1  -1.65745824498575E+01
+            GR2  -3.32194670927482E+01
+
+Atomic value of nuclear-electron potential energies.  VNEO is the n-e potential
+energy with its own nucleus.  VNET is the n-e potential energy with all nuclei
+in the molecule.  (COR) is the value of the n-e potential energy corrected 
+for the virial ratio.  CorrectedV= V*2(1 + V/T) / (V/T)
+           VNEO  -9.00397354913164E+01      VNEO(COR)  -9.00640572060417E+01
+           VNET  -1.35394270177458E+02      VNET(COR)  -1.35430843150454E+02
+
+Average electron-electron repulsion energy
+           VEET   3.61778130200532E+01      VEET(COR)   3.61875854437821E+01
+
+Atomic average of Hartree-Fock energy
+            EHF  -6.14004683455556E+01
+
+                                            VREP(COR)   5.97516295952942E+01
+                                              V(ATOM)  -7.56792135551603E+01
+
+Atomic dipole moments
+          EL DX  -2.47315010059451E-01
+          EL DY  -2.47290096261827E-01
+          EL DZ  -2.47287554942525E-01
+  EL DIPOLE MAG   4.28331928227797E-01
+
+
+Atomic quadrupole moments
+
+            QXX   5.54956101808321E-05      QAA(DIAG)  -1.45505660095444E+00
+            QXY   1.45512334901676E+00
+            QXZ   1.45509254515442E+00
+            QYY   7.26225109580606E-05      QBB(DIAG)  -1.45517511449206E+00
+            QYZ   1.45513167565780E+00
+            QZZ  -1.28118121140049E-04      QCC(DIAG)   2.91023171544651E+00
+
+Atomic force components.  These are the forces exherted by the charge density
+of atom A on the various nuclei B. 
+
+Components of force on nucleus of atom A by charge density of atom A
+           FAXA  -2.41296868829645E-01
+           FAYA  -2.41308580078432E-01
+           FAZA  -2.41317466697105E-01
+
+Sum of components of force on all nuclei but nucleus A by charge density of
+atom A
+           FBXA   5.95294710150613E+00
+           FBYA   5.95291820453238E+00
+           FBZA   5.95292934343825E+00
+      
+
+           RHO*L   1.02703833125689E+03
+
+Atomic volumes.  VOL1 is the atomic volume out to the 0.002 au contour and
+VOL2 is the atomic volume out to the 0.001 au contour (See input section in
+proaim.man)
+           VOL1   8.80412008867685E+01
+           VOL2   7.42734259344981E+01
+
+Number of electrons in VOL1 and VOL2.
+        N(VOL1)   6.09060393322729E+00
+        N(VOL2)   6.07080430185388E+00
+
+
+The elements listed in the Atomic Overlap Matrix.
+
+   THE ATOMIC OVERLAP MATRIX AOM :
+
+  0.249999
+ -0.125065  0.062572
+  0.392275 -0.196247  0.615546
+ -0.134044  0.067059 -0.210336  0.071878
+ -0.000040  0.000615 -0.001930  0.000660  0.247778
+ -0.000008 -0.000240 -0.000163  0.000201  0.025194  0.086658
+ -0.000059  0.000399 -0.000923  0.000431  0.194674  0.035646  0.357457
+ -0.000027  0.000039 -0.000575 -0.000093  0.090278  0.016530  0.127719  0.141273
+ -0.000226 -0.000072  0.000225 -0.000077 -0.014292  0.020553  0.158797  0.073640
+  0.156480
+ -0.000200  0.000190  0.000234 -0.000364 -0.057314 -0.088992  0.040759  0.054756
+  0.084393  0.193006
+ -0.000282 -0.000302  0.000351  0.000080 -0.080739  0.075563  0.064719  0.005303
+  0.118882  0.002189  0.194537
+ -0.000002  0.000314  0.000203  0.000294 -0.000465 -0.039181  0.053805 -0.104132
+  0.000685  0.000012  0.000018  0.191451
+  0.000000 -0.000184  0.000076  0.000394  0.000000  0.101593  0.024158 -0.080448
+  0.000000 -0.150277  0.106287  0.068696  0.243461
+  0.000000  0.000381  0.000171  0.000145  0.000000 -0.082578  0.051831 -0.088719
+  0.000000  0.055517 -0.040471  0.184063  0.000000  0.243461
+
+             NA   3.05555632782000E+00
+             NB   3.05555632782000E+00
+             N    6.11111265564001E+00
+
+
+The following quantities calculate the fluctuation in an average electron
+population and the degree of its localization.  The proceedure applies only 
+to single-determinantal wave functions.  (see JACS 97, p 7391 (1975) )
+
+Atomic average of the Fermi correlation
+           FOOA  -2.02459244741548E+00
+           FOOB  -2.02459244741548E+00
+
+Localization of alpha electrons in atom A
+           ALOC   6.62593724416766E-01
+           BLOC   6.62593724416766E-01
+
+Fluctutation in average alpha electron population
+            FLA   1.03096388040453E+00
+            FLB   1.03096388040453E+00
+
+Total fluctuation in atomic population
+             FL   4.08652020822453E+00
+
+

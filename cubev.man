@@ -1,0 +1,125 @@
+
+AIMPAC Utilities                                                    cube(3)
+ 
+NAME
+     CUBEV - calculates cube of properties (in atomic units).
+ 
+SYNOPSIS
+     cubev infile wfnfile 
+ 
+DESCRIPTION
+ 
+	This is a vectorized version of old CUBE program.
+        The cubev program reads the input data from the infile 
+        and the wavefuction from the wfnfile and calculates
+        a cube of values of the requested property.
+ 
+ARGUMENTS
+ 
+     infile (for example 'hcoh.inf')
+        The input file describes the type and characteristics of the 
+        desired calculation.
+ 
+     wfnfile (for example 'hcoh.wfn')
+        The wavefunciton file contains the basis set and optimized 
+        coefficients from a SCF calculation describing the charge 
+        distribution of that molecule.
+ 
+FORMAT
+ 
+        The input to CUBEV is free format with the first seven characters 
+        of each card being ignored by the routine and used by the user 
+        as labels for ease of use.  An example of the input is given here.
+ 
+        TITLE:  Formaldehyde HF/3-21G//HF/3-21G rho 
+        INCRM:  10.0 0.100 0
+        CENTR:  0.0 0.0 0.0
+        PLANE:  0 1 2 3 4
+        NFUNC:  1
+ 
+        The cards are used as follows:
+ 
+        TITLE:  Formaldehyde HF/3-21G//HF/3-21G rho 
+        The first card is a 60 character title card.
+ 
+        INCRM:  10.0 0.100 0
+        The second card defines the cube size and density.  The first real 
+        number (N1) is the length of the axis of the cube in atomic 
+        units (all values are in atomic units).  The second real number (N2) 
+        is the distance between each cube point along each axis.  This 
+        defines the density of the cube as there will be N1/N2 points 
+        along each axis and hence (N1/N2)**3 cube points in total.  CUBE
+        is dimensioned to handle up to a 200 X 200 X 200 cube.
+        The third (integer) number alows the user to take advantage of 
+        molecular symmetry which will speed up the calculation of the cube.
+        A value of 0 means the cube will be calculated by not taking advantage
+        of symmetry.  A value of 1 means there is symmetry in Y.  A value
+        of 2 means there is symmetry in both X and Y.
+ 
+CENTR:  0.0 0.0 0.0
+        The third card defines the center of the plot in the molecular 
+        frame of reference.  The cube will be evenly placed about this 
+        point.
+ 
+PLANE:  0 1 2 3 4
+        The fourth card allows the user to define the plane of interest 
+        for this calculation rotating it to the XY plane of the plotter.
+        The user has a choice of two methods for description of the plane, 
+        inertial axis or Euler angles.  The first integer read determines 
+        which method is used.  If the integer value is zero inertial axis 
+        is to be used.  The integers following are the atom numbers of 
+        those atoms within the plane.  Any number of atoms (up to 30) may 
+        be used to define the plane (three atoms define a plane, but more 
+        may be entered).  In this case, the user has requested that atoms 
+        1, 2, 3, and 4 be placed in the plane.  If the atoms do not define 
+        a plane, the routine will make a best fit to the plane and the 
+        results will most likely not be desirable.  If the integer value 
+        is 1 then Euler angles will be used.  The first real number is 
+        the rotation, in degrees, about the molecular Z axis.  (Positive
+        rotations correspond to clockwise rotations when viewing down 
+        that axis toward the origin from the positive axis)  The second 
+        real number is the rotation about the molecular X axis.  The third 
+        is the rotation about the Z axis of the plotter's frame.  For 
+        example if the formaldehyde molecule were in the YZ plane in 
+        the wavefunction file the following card would place the molecule 
+        in the plotter's XY plane.
+ 
+PLANE:  1 90.0 90.0 0.0
+ 
+        This corresponds to rotation about the Z axis, placing the molecule 
+        in the XZ plane.  The second rotation about the X axis places 
+        the molecule in the XY plane.  And the user has decided not to 
+        reorient the molecule now that it is in the XY plane, hence the 
+        third angle is 0.0.
+ 
+        This feature is merely a carry-over from the GRID routine and is
+        not terribly usefull here.  It is suggested that the initial cube
+        runs use the following card;
+ 
+PLANE:  0
+ 
+        which performs no orientation manipulation on the cube.
+ 
+NFUNC:  1
+        The last card chooses the function to be calculated at each point 
+        in the cube.  An integer value of 1 chooses rho while a value of 
+        2 chooses del-squared rho.  Other functions are presently being 
+        implemented and will follow in later releases.
+ 
+OUTPUT
+ 
+        CUBEV generates a file containing the requested cube of data.
+        This file will have the file extension '.qub'.  The cube may
+        be processed by running it through envelope.
+ 
+EXAMPLES
+ 
+     cubev hcoh hcoh
+        This requests a calculation of the cube described in hcoh.inf 
+        using the wavefuction in hcoh.wfn.
+ 
+SEE ALSO
+     envelope(3), grid(3), contor(3), relief(3)
+ 
+Release 1.0                       AIMPAC                            cube(3)
+

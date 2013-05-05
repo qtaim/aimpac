@@ -1,0 +1,52 @@
+
+AIMPAC Utilities                                                    contor(3)
+ 
+NAME
+     contor - produces contour maps of GRID output
+ 
+SYNOPSIS
+     contor grdfile > plotter
+ 
+DESCRIPTION
+ 
+        The CONTOR program reads in a grid of data (grdfile) 
+        output by GRID, produces a contour map of the function,
+        and the output is redirected to the output device for 
+        plotting.
+ 
+ARGUMENTS
+ 
+     grdfile (for example 'hcoh.grd')
+        The grdfile contains a grid of data output by the program
+        GRID.
+ 
+        The output grid is plotted with the following conventions.
+ 
+        1) Rho, the contours are solid and range over the values
+                listed below.
+        2) Del-squared rho, the negative value contours are solid,
+                the positive values dashed and the values range over
+                negative and positive values alike as outlined below.
+        3) Transition density, the positive contours are solid, the negative
+                values dashed, and they range as follows.
+ 
+        The contour values are (in atomic units);
+          0.001,0.002,0.004,0.008,
+                0.02, 0.04, 0.08,
+                0.2,  0.4,  0.8,
+                2.0,  4.0,  8.0,
+                20.0, 40.0, 80.0
+                200.0,400.0,800.0
+ 
+ 
+EXAMPLES
+ 
+     contor hcoh > /dev/tty02 (printer device)
+        This requests a calculation of the contor map of the function
+        in hcoh.grd.
+ 
+SEE ALSO
+     grid(3), relief(3)
+ 
+Release 1.0                       AIMPAC                            contor(3)
+

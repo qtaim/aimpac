@@ -1,0 +1,35 @@
+From CHEESE@SSCvax.CIS.McMaster.CA Sat Aug  1 16:00 EDT 1992
+Received: from SSCvax.CIS.McMaster.CA by alchemy.chem.utoronto.ca (5.65/1.34)
+	id AA08881; Sat, 1 Aug 92 16:00:35 -0400
+Date: Sat, 1 Aug 1992 15:58 EDT
+From: CHEESE@SSCvax.CIS.McMaster.CA
+Subject: profil inp hco2.pfl
+To: smb@smb.chem.niu.edu, aufinger@VTVM1.BITNET, glusker@fccc.edu,
+        boyd@ac.dal.ca, che9990@UBVMS.BITNET, nivan%vaxdqf@itep.itep.br,
+        dakkouri@dulruu51.BITNET, fkaaa00@BLEKUL11.BITNET,
+        b_duke@darwin.ntu.edu.au, edgecomk@qucdn.queensu.ca,
+        grfamini@crdec4.apgea.army.mil, sc18@nemomus.BITNET,
+        hartree@IMISIAM.BITNET, popeye@VTVM1.BITNET,
+        glendening@bert.chem.wisc.edu, kgough@abacus.ac.brocku.ca,
+        gronerts@gibbs.sfsu.edu, aholder@umkcvax1.bitnet,
+        ugca311@mvs.ulcc.ac.uk, kapsomen@zinc.chem.ucalgary.ca,
+        ccaz10@GRTHEUN1.BITNET, koehler@DMRHRZ11.BITNET,
+        kurtzh@memstvx1.BITNET, lamatsch@czheth5a.bitnet,
+        uabsvp02@asnuab.BITNET, agrlug@kristall.chemie.fu-berlin.dbp.de,
+        y_li@uprenet.BITNET, mmcallis@alchemy.chem.utoronto.ca,
+        eam@cc.adfa.oz.au, u3913aa@vms.ucc.okstate.edu,
+        paul@chem1.glasgow.ac.uk, modrego@cc.unizar.es, uabpvb01@asnuab.bitnet,
+        immmm04@cc.csic.es, jpr@lanl.bitnet, roberson@hydroxide.chem.utah.edu,
+        schwarz@hrz.uni-siegen.dbp.de, alan_shusterman@offcampus.reed.edu,
+        astreit@UCBCMSA.BITNET, 4210@db0tuz01.BITNET
+Message-Id: <3BFDD26AC020E53B@SSCvax.CIS.McMaster.CA>
+X-Envelope-To: mmcallis@alchemy.chem.utoronto.ca, ttang@alchemy.chem.utoronto.ca
+X-Vms-To: @USERS
+Status: R
+
+TITLE:  HCO2 profile of del sq rho between C1-O2 
+PARAM:  100 10.0
+START:  0.00000000  0.00000000  0.57942804  
+ENDPT:  0.00000000  2.11695431 -0.38686460  
+FUNC:   2
+
